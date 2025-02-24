@@ -33,9 +33,6 @@ This project implements a recommendation system to suggest optimal price points 
 - Timestamps converted to datetime format
 - Dataset contains 127,217 unique users and 1,741,152 purchases
 
-## Recommendation Strategy
-The system leverages collaborative filtering techniques with the SVD algorithm to predict user preferences for USD-coin combinations, with time of day as a key contextual factor. The parallel processing implementation allows for efficient generation of recommendations at scale.
-
 # Model Design Considerations
 
 ## Model Input and Evaluation Strategy
@@ -54,5 +51,31 @@ I faced a decision point regarding model inputs and evaluation metrics.
 
 5. **Metric Selection**: Given this design, traditional Precision@k and Recall@k metrics weren't appropriate. Instead, I used Hit Rate as the primary evaluation metric, which measures whether the recommended item matches any item actually purchased by the user.
 
+# Data Preparation & Modeling Approach
 
+## Data Preparation Strategy
+
+1. **Handling Extreme Values**: I preserved extreme values in all columns. In recommendation systems, what appears as an outlier in the aggregate data might actually represent valid preferences for specific users. While this approach potentially increases data sparsity and computational complexity, it ensures we don't eliminate important signals from high-value or highly active users.
+
+2. **Rating Assignment**: Implemented a binary rating approach where all purchases receive a rating of 1. This implicit feedback model focuses on capturing the basic purchase signal rather than attempting to infer different levels of preference.
+
+3. **Train-Test Split**: Stratified the split by user_id to ensure all users appear in both training and testing sets.
+
+## Modeling Implementation
+
+The recommendation system utilizes the Singular Value Decomposition (SVD) algorithm from the Surprise library, which is well-suited for implicit feedback data:
+
+1. **Model Input**: User-hour combinations paired with item_id (USD-coins combinations) to capture temporal patterns in user preferences.
+
+2. **Latent Factors**: The SVD model with 30 latent factors allows the system to discover underlying patterns in user-item interactions without requiring explicit feature engineering.
+
+## Future Improvements
+
+Several opportunities exist to enhance the current implementation:
+
+1. **Temporal Validation**: Implement time-based validation to better simulate real-world recommendation scenarios, potentially stratifying by timestamp to maintain chronological ordering.
+
+2. **User Weighting**: Develop techniques to balance the influence of users with extreme numbers of purchases to prevent them from dominating the model training.
+
+3. **Alternative Rating Approaches**: Explore more sophisticated rating schemes such as purchase frequency or VFM-based ratings to capture richer signals from user behavior.
 ---
