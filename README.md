@@ -1,36 +1,58 @@
-# tango-home-assignment
+# USD-Coins Recommendation System
 
-## Summary of Key Decision Points
+## Overview
+This recommendation system predicts USD-coin combinations to offer users at specific hours based on their historical purchase patterns. The system uses SVD (Singular Value Decomposition) to learn user preferences and make personalized recommendations.
 
-### Problem Formulation
-- **Analogy**: Treat the price recommendation task as a movie recommendation analog (where price = movie and VFM = movie features).
-- **Data Usage**: Use existing price points only, as generating new prices is too complex.
-- **Goal**: Recommend 6 prices to each user.
+## Implementation Highlights
 
-### Data Treatment
-- **Burst Purchases**: Keep burst purchases (multiple purchases in 1 minute) as separate events for simplicity.
-- **Aggregation**: Aggregate data to user-price level for main interactions.
-- **Mean VFM Calculation**: Calculate the mean VFM per price point.
-- **Temporal Features**: Include temporal features (hour, week) based on insights from heatmap analysis.
+### Data Preparation
+The system creates unique identifiers for items (USD-coins combinations) and user contexts (user-hour combinations). We explored different rating approaches to capture user preferences, including binary ratings, Value for Money (VFM) based ratings, and personalized combined ratings.
 
-### Model Selection
-- **Model Choice**: Choose LightFM for a hybrid approach.
-  - Combines collaborative filtering with price features.
-  - Features include VFM, hour, and week patterns.
-  - Simpler than neural approaches for the 4-hour scope.
+### Model Training
+We use Surprise's SVD algorithm with 30 latent factors to capture the patterns in user purchasing behavior. The model learns the relationship between user-hour combinations and their preferred USD-coin packages.
 
-### Evaluation Strategy
-- **Primary Metric**: Hit Rate@6 as the primary evaluation metric.
-- **Baseline Comparison**: Compare against a baseline (most popular prices).
-- **Hit Rate Lift**: Use `hit_rate_lift = model_hit_rate / baseline_hit_rate` for clarity.
-- **Single Metric Preference**: A single metric makes comparison clear and straightforward.
+### Recommendation Generation
+The recommendation function generates predictions for all possible USD-coin combinations for a given user at a specific hour, then returns the top N options with the highest predicted ratings.
 
-### Considered But Rejected
-- **New Price Point Generation**: Rejected due to complexity.
-- **Burst Purchase Aggregation**: Kept to maintain data cleanliness.
-- **Multiple Evaluation Metrics**: Preferred a single clear metric for evaluation.
-- **Complex Temporal Evaluation Windows**: Avoided for simplicity.
+### Parallel Processing
+To improve performance, the system implements parallel processing using Python's multiprocessing module. This allows multiple user recommendations to be generated simultaneously, significantly reducing overall processing time.
 
----
+## Alternative Rating Approaches
 
-This framework balances sophistication with the feasibility of a 4-hour task while maintaining reasonable evaluation standards.
+### Binary Ratings
+The simplest approach where all purchases receive a rating of 1. This captures the basic signal that a purchase occurred without differentiating between purchases.
+
+### VFM-Based Ratings
+Uses the Value for Money (coins per USD) as the rating metric. This approach helps the model learn which combinations provide better objective value.
+
+### Personalized Combined Ratings
+This sophisticated approach calculates personalized weights for different factors (USD amount, coins amount, and VFM) based on each user's behavior patterns. It captures the complex tradeoffs between preferring certain USD amounts, specific coin amounts, or higher VFM.
+
+## Performance Optimizations
+Several optimizations were implemented to improve recommendation generation speed:
+- Pre-computing unique items to avoid repeated calculations
+- Using numpy for faster vector operations
+- Implementing partial sorting for better performance
+- Direct matrix operations using the model's internal matrices
+
+## Future Work
+
+1. **Experiment with Different Rating Approaches**
+   - Test which rating strategy produces the best recommendations
+   - Consider incorporating purchase frequency and recency
+
+2. **Add Temporal Features**
+   - Implement time decay for older purchases
+   - Model day-of-week patterns
+
+3. **Feature Engineering**
+   - Add more contextual features
+   - Create user segments based on purchase behavior
+
+4. **Advanced Models**
+   - Test neural network-based recommenders
+   - Explore ensemble approaches
+
+5. **Evaluation Framework**
+   - Implement comprehensive offline evaluation metrics
+   - Prepare for A/B testing in production
