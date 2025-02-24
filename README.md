@@ -61,13 +61,40 @@ I faced a decision point regarding model inputs and evaluation metrics.
 
 3. **Train-Test Split**: Stratified the split by user_id to ensure all users appear in both training and testing sets.
 
-## Modeling Implementation
+# In-App Purchase Recommendation System
 
-The recommendation system utilizes the Singular Value Decomposition (SVD) algorithm from the Surprise library, which is well-suited for implicit feedback data:
+## Model Overview
 
-1. **Model Input**: User-hour combinations paired with item_id (USD-coins combinations) to capture temporal patterns in user preferences.
+This project implements a collaborative filtering recommendation system for in-app purchases using the Surprise library. The system recommends optimal USD-Coins combinations to users based on hourly purchase patterns.
 
-2. **Latent Factors**: The SVD model with 30 latent factors allows the system to discover underlying patterns in user-item interactions without requiring explicit feature engineering.
+### Data Preparation
+
+The model uses a unique approach to represent user preferences:
+
+- **Users**: Represented as a combination of user_id and hour of day (`user_hour`)
+- **Items**: Represented as USD-Coins combinations (`item_id`)
+- **Ratings**: Normalized count of unique users making purchases for each user_hour and item_id pair
+
+The data preparation process involves creating these composite identifiers and calculating normalized ratings based on unique user counts. This approach captures the popularity of items within specific time contexts.
+
+### Model Training
+
+The recommendation model uses Singular Value Decomposition (SVD), a matrix factorization technique that identifies latent factors capturing the underlying patterns in user-item interactions. The model parameters were chosen to balance between capturing complex patterns in the data, ensuring convergence, and preventing overfitting.
+
+### Baseline Comparison
+
+To evaluate the effectiveness of the model, a basic approach was implemented that simply recommends the most popular items for each hour based on normalized purchases per unique user. This baseline represents a simple, non-personalized approach that only considers aggregate statistics per hour.
+
+## Evaluation Results
+
+Due to computational constraints, the model was evaluated on random samples from the test set rather than the entire dataset. The inference process was notably slow on the available hardware, which necessitated this sampling approach.
+
+Despite the limited testing, the results show promising improvements over the baseline:
+
+- **Recommendation Model Hit Rate**: ~28.4%
+- **Baseline Hit Rate**: 15.9%
+
+This represents a significant improvement over the baseline approach, demonstrating the value of personalization and the collaborative filtering approach.
 
 ## Future Improvements
 
@@ -77,5 +104,31 @@ Several opportunities exist to enhance the current implementation:
 
 2. **User Weighting**: Develop techniques to balance the influence of users with extreme numbers of purchases to prevent them from dominating the model training.
 
-3. **Alternative Rating Approaches**: Explore more sophisticated rating schemes such as purchase frequency or VFM-based ratings to capture richer signals from user behavior.
+3. **Alternative Rating Approaches**: 
+   - Explore weighted combinations of purchase frequency and Value For Money (VFM) metrics
+   - Implement context-aware ratings that account for user session duration
+   - Consider implicit feedback signals like view-to-purchase conversion rates
+
+4. **Model Exploration**:
+   - Test neural network-based collaborative filtering approaches
+   - Implement hybrid models combining content-based and collaborative filtering
+   - Explore factorization machines for handling high-dimensional sparse data
+   - Implement sequence-aware models that account for purchase order
+
+5. **Feature Engineering**:
+   - Incorporate user demographic data if available
+   - Add temporal features like day of week, weekend/weekday, or special events
+   - Create item features based on purchase history patterns
+
+6. **Scalability Improvements**:
+   - Optimize the inference process for faster recommendations
+   - Implement incremental learning to update the model with new data
+   - Explore techniques for handling cold-start users and items
+
+7. **Evaluation Metrics**:
+   - Implement diversity and serendipity metrics
+   - Measure business-oriented metrics like predicted revenue lift
+   - Conduct A/B testing to validate model performance in production
+
+By implementing these improvements, the recommendation system could provide more accurate, diverse, and contextually relevant suggestions to users, potentially increasing conversion rates and user satisfaction.
 ---
