@@ -1,7 +1,7 @@
-# Tango - Home Assignment: USD-Coins Recommendation System
+# Tango - Home Assignment: Price Points Recommendation System
 
 ## Overview
-This project implements a recommendation system to suggest optimal USD-coin combinations to users based on their historical purchase patterns and contextual factors such as time of day.
+This project implements a recommendation system to suggest optimal USD-coin combinations to users based on their historical purchase patterns
 
 ## Key Findings from Data Analysis
 
