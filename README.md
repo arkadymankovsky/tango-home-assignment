@@ -51,18 +51,6 @@ I faced a decision point regarding model inputs and evaluation metrics.
 
 5. **Metric Selection**: Given this design, traditional Precision@k and Recall@k metrics weren't appropriate. Instead, I used Hit Rate as the primary evaluation metric, which measures whether the recommended item matches any item actually purchased by the user.
 
-# Data Preparation & Modeling Approach
-
-## Data Preparation Strategy
-
-1. **Handling Extreme Values**: I preserved extreme values in all columns. In recommendation systems, what appears as an outlier in the aggregate data might actually represent valid preferences for specific users. While this approach potentially increases data sparsity and computational complexity, it ensures we don't eliminate important signals from high-value or highly active users.
-
-2. **Rating Assignment**: Implemented a binary rating approach where all purchases receive a rating of 1. This implicit feedback model focuses on capturing the basic purchase signal rather than attempting to infer different levels of preference.
-
-3. **Train-Test Split**: Stratified the split by user_id to ensure all users appear in both training and testing sets.
-
-# In-App Purchase Recommendation System
-
 ## Model Overview
 
 This project implements a collaborative filtering recommendation system for in-app purchases using the Surprise library. The system recommends optimal USD-Coins combinations to users based on hourly purchase patterns.
@@ -74,6 +62,9 @@ The model uses a unique approach to represent user preferences:
 - **Users**: Represented as a combination of user_id and hour of day (`user_hour`)
 - **Items**: Represented as USD-Coins combinations (`item_id`)
 - **Ratings**: Normalized count of unique users making purchases for each user_hour and item_id pair
+
+Splitting Data
+- **Train-Test Split**: Stratified the split by user_id to ensure all users appear in both training and testing sets.
 
 The data preparation process involves creating these composite identifiers and calculating normalized ratings based on unique user counts. This approach captures the popularity of items within specific time contexts.
 
