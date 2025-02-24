@@ -36,4 +36,23 @@ This project implements a recommendation system to suggest optimal price points 
 ## Recommendation Strategy
 The system leverages collaborative filtering techniques with the SVD algorithm to predict user preferences for USD-coin combinations, with time of day as a key contextual factor. The parallel processing implementation allows for efficient generation of recommendations at scale.
 
+# Model Design Considerations
+
+## Model Input and Evaluation Strategy
+
+I faced a decision point regarding model inputs and evaluation metrics.
+
+### Key Considerations:
+
+1. **Contextual Factors**: The exploratory data analysis clearly showed that hour of day significantly influences user purchasing patterns, suggesting it should be included as an input feature.
+
+2. **Evaluation Requirements**: The recommended metrics in the assignment, like Precision@k and Recall@k require a scenario where users choose multiple offers simultaneously and then compared to predicted offers. But in order to achieve it I need to agg by timestamp.
+
+3. **Model Input Decision**: I chose to include hour as a contextual factor by creating user-hour combinations (rather than just user IDs) as the model input. This captures the temporal purchasing patterns observed in the data.
+
+4. **Evaluation Approach**: With this model structure, the system generates personalized recommendations for each user-hour combination.
+
+5. **Metric Selection**: Given this design, traditional Precision@k and Recall@k metrics weren't appropriate. Instead, I used Hit Rate as the primary evaluation metric, which measures whether the recommended item matches any item actually purchased by the user.
+
+
 ---
