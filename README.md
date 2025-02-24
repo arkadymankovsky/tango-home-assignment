@@ -1,7 +1,7 @@
 # Tango - Home Assignment: Price Points Recommendation System
 
 ## Overview
-This project implements a recommendation system to suggest optimal USD-coin combinations to users based on their historical purchase patterns
+This project implements a recommendation system to suggest optimal price points combinations to users based on their historical purchase patterns
 
 ## Key Findings from Data Analysis
 
@@ -14,7 +14,7 @@ This project implements a recommendation system to suggest optimal USD-coin comb
 - **Discrete Price Points**: USD values follow a categorical pattern with specific price tiers dominating transactions
 - **Value for Money (VFM)**: Several distinct peaks in the distribution suggest commonly offered value propositions
 - **Popular Price Points**: The $0.99 price point consistently shows the highest purchase frequency across all hours
-- **Low-Volume Tiers**: Certain price points have very few purchases, suggesting less market appeal
+- **Low-Volume Tiers**: Certain price points have very few purchases
 
 ### Temporal Patterns
 - **Hourly Variation**: Average price per user (normalized by number of unique users) varies by hour, indicating time-based preferences
@@ -37,5 +37,3 @@ This project implements a recommendation system to suggest optimal USD-coin comb
 The system leverages collaborative filtering techniques with the SVD algorithm to predict user preferences for USD-coin combinations, with time of day as a key contextual factor. The parallel processing implementation allows for efficient generation of recommendations at scale.
 
 ---
-
-*Note: This implementation demonstrates how historical purchase patterns and time-based factors can be used to create personalized recommendations in a virtual economy system.*
