@@ -92,14 +92,14 @@ Several opportunities exist to enhance the current implementation:
 
 1. **Temporal Validation**: Stratifying by timestamp to maintain chronological ordering.
 
-2. **User Weighting**: Develop techniques to balance the influence of users with extreme numbers of purchases to prevent them from dominating the model training.
+2. **User Weighting**: Handling the influence of users with extreme numbers of purchases to prevent them from dominating the model training.
 
 3. **Alternative Rating Approaches**: 
    - Explore weighted combinations of purchase frequency and Value For Money (VFM) metrics
 
 4. **Model Exploration**:
    - Test neural network-based collaborative filtering approaches
-   - 
+
 5. **Scalability Improvements**:
    - Optimize the inference process for faster recommendations
    - Implement incremental learning to update the model with new data
